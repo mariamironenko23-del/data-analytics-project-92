@@ -22,7 +22,9 @@ order by income desc
 limit 10;
 
 /*Анализ отдела продаж
-Отчет содержит информацию о продавцах, чья средняя выручка за сделку меньше средней выручки за сделку по всем продавцам*/
+Отчет содержит информацию о продавцах,
+чья средняя выручка за сделку меньше
+средней выручки за сделку по всем продавцам*/
 
 select
     e.first_name || ' ' || e.last_name as seller,
@@ -37,12 +39,13 @@ inner join products as p
 group by seller
 having
     FLOOR(AVG(p.price * s.quantity)) < (
-        select FLOOR(AVG(p.price * s.quantity))
-        from sales as s
-        inner join products as p
-            on s.product_id = p.product_id
+        select FLOOR(AVG(pp.price * ss.quantity))
+        from sales as ss
+        inner join products as pp
+            on ss.product_id = pp.product_id
     )
---сравнение средней выручки за сделку с средней выручкой за сделку по всем продавцам
+/*сравнение средней выручки за сделку
+с средней выручкой за сделку по всем продавцам*/
 order by average_income asc;
 
 /*Анализ отдела продаж
@@ -82,7 +85,7 @@ order by age_category;
 Данные по количеству уникальных покупателей и выручке, которую они принесли */
 
 select
-    TO_CHAR(sale_date, 'YYYY-MM') as selling_month,
+    TO_CHAR(s.sale_date, 'YYYY-MM') as selling_month,
     --преобразование даты в формат YYYY-MM
     COUNT(distinct c.customer_id) as total_customers,
     --подсчет уникальных клиентов
@@ -112,7 +115,7 @@ with tab as (
             over
             (
                 partition by c.customer_id
-                order by sale_date asc
+                order by s.sale_date asc
             ) as dr
     from sales as s
     inner join customers as c
