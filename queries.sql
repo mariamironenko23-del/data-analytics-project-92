@@ -27,7 +27,7 @@ limit 10;
 select
     e.first_name || ' ' || e.last_name as seller,
     --объединение имени и фамилии продавца
-    floor(avg(p.price * s.quantity)) as average_income
+    FLOOR(AVG(p.price * s.quantity)) as average_income
 --расчет средней выручки продавца и округление в меньшую сторону
 from sales as s
 inner join employees as e
@@ -36,8 +36,8 @@ inner join products as p
     on s.product_id = p.product_id
 group by seller
 having
-    floor(avg(p.price * s.quantity)) < (
-        select floor(avg(p.price * s.quantity))
+    FLOOR(AVG(p.price * s.quantity)) < (
+        select FLOOR(AVG(p.price * s.quantity))
         from sales as s
         inner join products as p
             on s.product_id = p.product_id
@@ -51,17 +51,17 @@ order by average_income asc;
 select
     e.first_name || ' ' || e.last_name as seller,
     --объединение имени и фамилии продавца
-    trim(to_char(s.sale_date, 'day')) as day_of_week,
+    TRIM(TO_CHAR(s.sale_date, 'day')) as day_of_week,
     --преобразование даты в день недели
-    floor(sum(p.price * s.quantity)) as income
+    FLOOR(SUM(p.price * s.quantity)) as income
 --расчет суммы выручки продавца и округление в меньшую сторону
 from sales as s
 inner join employees as e
     on s.sales_person_id = e.employee_id
 inner join products as p
     on s.product_id = p.product_id
-group by day_of_week, to_char(s.sale_date, 'id'), seller
-order by to_char(s.sale_date, 'id'), seller asc;
+group by day_of_week, TO_CHAR(s.sale_date, 'id'), seller
+order by TO_CHAR(s.sale_date, 'id'), seller asc;
 
 /* Aнализ покупателей
 Первый отчет - количество покупателей в разных возрастных группах */
@@ -73,7 +73,7 @@ select
         else '40+'
     end as age_category,
     --разбивка на возрастные группы
-    count(customer_id) as age_count
+    COUNT(customer_id) as age_count
 from customers
 group by age_category
 order by age_category;
@@ -108,7 +108,7 @@ with tab as (
         c.first_name || ' ' || c.last_name as customer,
         --проставлена нумерация для покупок
         e.first_name || ' ' || e.last_name as seller,
-        dense_rank()
+        DENSE_RANK()
             over
             (
                 partition by c.customer_id
