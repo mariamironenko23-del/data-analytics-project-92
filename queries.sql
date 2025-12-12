@@ -49,7 +49,7 @@ order by average_income ASC
 
 select e.first_name ||' '|| e.last_name as seller, 
 --объединение имени и фамилии продавца
-to_char(s.sale_date,'day') as day_of_week,
+trim(to_char(s.sale_date,'day')) as day_of_week,
 --преобразование даты в день недели
 floor(SUM(p.price*s.quantity)) as income
 --расчет суммы выручки продавца и округление в меньшую сторону
