@@ -1,13 +1,11 @@
-                              1
 select COUNT(*) as customers_count
 from customers;
 --считает общее количество покупателей из таблицы customers
 
-                              2
 /*Анализ отдела продаж
 Первый отчет о десятке лучших продавцов*/
 
-select e.first_name ||' '|| e.last_name as seller, 
+select e.first_name || ' ' || e.last_name as seller, 
 --объединение имени и фамилии продавца
 COUNT(s.sales_id) as operations, 
 --подсчет количеста проведенных сделок
@@ -21,11 +19,11 @@ on s.product_id = p.product_id
 group by seller
 order by income desc
 limit 10;
-                             3
+
 /*Анализ отдела продаж
 Отчет содержит информацию о продавцах, чья средняя выручка за сделку меньше средней выручки за сделку по всем продавцам*/
 
-select e.first_name ||' '|| e.last_name as seller, 
+select e.first_name || ' ' || e.last_name as seller, 
 --объединение имени и фамилии продавца
 floor(AVG(p.price*s.quantity)) as average_income
 --расчет средней выручки продавца и округление в меньшую сторону
@@ -43,11 +41,11 @@ having floor(AVG(p.price*s.quantity))<(select FLOOR(AVG(p.price*s.quantity))
 order by average_income ASC
 ;
 
-                           4
+
 /*Анализ отдела продаж
 Отчет содержит информацию о выручке по дням недели*/
 
-select e.first_name ||' '|| e.last_name as seller, 
+select e.first_name || ' ' || e.last_name as seller, 
 --объединение имени и фамилии продавца
 trim(to_char(s.sale_date,'day')) as day_of_week,
 --преобразование даты в день недели
@@ -61,7 +59,6 @@ on s.product_id = p.product_id
 group by day_of_week,to_char(s.sale_date,'id'), seller
 order by to_char(s.sale_date,'id'), seller ASC;
 
-                         5
 /* Aнализ покупателей
 Первый отчет - количество покупателей в разных возрастных группах */
 
@@ -77,7 +74,7 @@ group by age_category
 order by age_category
 ;
 
-                          6
+
 /* Aнализ покупателей
 Данные по количеству уникальных покупателей и выручке, которую они принесли */
 
@@ -94,7 +91,7 @@ on s.product_id = p.product_id
 group by selling_month
 order by selling_month;
 
-                          7
+
 /* Aнализ покупателей
 Покупатели, первая покупка которых была в ходе проведения акций */
 
